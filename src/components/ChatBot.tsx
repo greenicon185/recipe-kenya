@@ -347,15 +347,21 @@ const ChatBot = () => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 h-14 w-14 md:h-12 md:w-12 rounded-full bg-orange-600 hover:bg-orange-700 shadow-lg z-50"
+        className="fixed bottom-4 right-4 h-14 w-14 md:h-12 md:w-12 rounded-full bg-orange-600 hover:bg-orange-700 shadow-lg z-50
+          sm:bottom-6 sm:right-6
+          xs:bottom-3 xs:right-3
+          !m-0"
         size="icon"
       >
         <MessageCircle className="h-7 w-7 md:h-6 md:w-6 text-white" />
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-md w-[95vw] flex flex-col h-[90vh] max-h-[90vh] min-h-[400px] p-0 md:resize-y">
-          <DialogHeader className="p-4 border-b bg-orange-600 text-white">
+        <DialogContent
+          className="w-full max-w-xs sm:max-w-md mx-auto p-0 rounded-2xl shadow-2xl border border-gray-200 bg-white mt-6 transition-all duration-200"
+          style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+        >
+          <DialogHeader className="p-4 border-b bg-orange-600 text-white rounded-t-2xl">
             <DialogTitle className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
               Recipe Assistant
@@ -365,7 +371,7 @@ const ChatBot = () => {
             </DialogTitle>
           </DialogHeader>
           
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full px-3 py-2">
             <ScrollArea className="flex-1 h-0 min-h-0 p-3 md:p-4 overflow-y-auto overflow-x-hidden">
               <div className="space-y-3 md:space-y-4">
                 {messages.length === 0 && (
@@ -392,11 +398,11 @@ const ChatBot = () => {
                 )}
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] md:max-w-[80%] w-fit p-2 md:p-3 rounded-lg ${
-                      message.sender === 'user' 
-                        ? 'bg-orange-600 text-white' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
+                    <div className={`max-w-[85%] md:max-w-[80%] w-fit p-2 md:p-3 rounded-2xl
+                      ${message.sender === 'user' 
+                        ? 'bg-orange-600 text-white rounded-br-md ml-8 sm:ml-12' 
+                        : 'bg-gray-100 dark:bg-zinc-800 text-gray-800 dark:text-gray-100 rounded-bl-md ml-2 sm:ml-4'
+                      } shadow-sm border border-orange-100 dark:border-zinc-800`}>
                       <div className="flex items-start gap-2 mb-1">
                         {message.sender === 'bot' ? <Bot className="h-3 w-3 md:h-4 md:w-4 mt-1" /> : <User className="h-3 w-3 md:h-4 md:w-4 mt-1" />}
                         <div className="flex-1">
@@ -442,7 +448,7 @@ const ChatBot = () => {
             </ScrollArea>
 
             <div className="p-3 md:p-4 border-t">
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center mx-2 sm:mx-0">
                 <Input
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
