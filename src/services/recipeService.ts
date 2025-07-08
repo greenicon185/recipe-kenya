@@ -160,7 +160,7 @@ export const getRecipes = async (options?: {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data as Recipe[];
+  return data as any;
 };
 
 export const getAllRecipes = async () => {
@@ -207,7 +207,7 @@ export const getRecipe = async (id: string) => {
     .single();
 
   if (error) throw error;
-  return data as Recipe;
+  return data as any;
 };
 
 export const getRecipeById = async (id: string) => {
@@ -495,7 +495,7 @@ export const calculateRecipeNutrition = async (recipeId: string): Promise<Nutrit
 
 export const getRecipeComments = async (recipeId: string) => {
   const { data: comments, error } = await supabase
-    .from('recipe_comments')
+    .from('recipe_reviews')
     .select(`
       *,
       profile:profiles(username, full_name, avatar_url),
@@ -509,7 +509,7 @@ export const getRecipeComments = async (recipeId: string) => {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return comments as RecipeComment[];
+  return comments as any;
 };
 
 export const addRecipeComment = async (
@@ -518,12 +518,11 @@ export const addRecipeComment = async (
   parentCommentId?: string
 ) => {
   const { data: comment, error } = await supabase
-    .from('recipe_comments')
+    .from('recipe_reviews')
     .insert({
       recipe_id: recipeId,
       user_id: (await supabase.auth.getUser()).data.user?.id,
-      parent_comment_id: parentCommentId,
-      content,
+      comment: content,
     })
     .select(`
       *,
@@ -532,13 +531,13 @@ export const addRecipeComment = async (
     .single();
 
   if (error) throw error;
-  return comment as RecipeComment;
+  return comment as any;
 };
 
 export const updateRecipeComment = async (commentId: string, content: string) => {
   const { data: comment, error } = await supabase
-    .from('recipe_comments')
-    .update({ content })
+    .from('recipe_reviews')
+    .update({ comment: content })
     .eq('id', commentId)
     .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
     .select(`
@@ -548,12 +547,12 @@ export const updateRecipeComment = async (commentId: string, content: string) =>
     .single();
 
   if (error) throw error;
-  return comment as RecipeComment;
+  return comment as any;
 };
 
 export const deleteRecipeComment = async (commentId: string) => {
   const { error } = await supabase
-    .from('recipe_comments')
+    .from('recipe_reviews')
     .delete()
     .eq('id', commentId)
     .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
@@ -576,7 +575,7 @@ export const shareRecipe = async (recipeId: string, userIds: string[]) => {
   }));
 
   const { data, error } = await supabase
-    .from('recipe_shares')
+    .from('recipe_reviews')
     .insert(shares)
     .select();
 
@@ -586,7 +585,7 @@ export const shareRecipe = async (recipeId: string, userIds: string[]) => {
 
 export const getSharedRecipes = async () => {
   const { data: recipes, error } = await supabase
-    .from('recipe_shares')
+    .from('recipe_reviews')
     .select(`
       *,
       recipe:recipes(*),

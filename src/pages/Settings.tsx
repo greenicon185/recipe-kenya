@@ -180,7 +180,7 @@ const Settings = () => {
         // If AI preferences are null, try to create default ones
         const defaultAI = await createDefaultAIPreferences(user.id);
         if (defaultAI) {
-          setAiPreferences(defaultAI);
+          setAiPreferences(defaultAI as any);
         }
       } catch (error) {
         console.error('Error initializing AI preferences:', error);

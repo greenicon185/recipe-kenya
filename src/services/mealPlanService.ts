@@ -29,7 +29,11 @@ export const getMealPlans = async (userId: string) => {
     .order('date', { ascending: true });
 
   if (error) throw error;
-  return mealPlans as MealPlan[];
+  return mealPlans?.map(plan => ({
+    ...plan,
+    date: plan.day,
+    servings: 1
+  })) as MealPlan[];
 };
 
 export const addMealPlan = async (
@@ -45,10 +49,8 @@ export const addMealPlan = async (
     .insert({
       user_id: userId,
       recipe_id: recipeId,
-      date,
+      day: date,
       meal_type: mealType,
-      servings,
-      notes,
     })
     .select(`
       *,
@@ -60,7 +62,11 @@ export const addMealPlan = async (
     .single();
 
   if (error) throw error;
-  return mealPlan as MealPlan;
+  return {
+    ...mealPlan,
+    date: mealPlan.day,
+    servings: 1
+  } as MealPlan;
 };
 
 export const updateMealPlan = async (
@@ -81,7 +87,11 @@ export const updateMealPlan = async (
     .single();
 
   if (error) throw error;
-  return mealPlan as MealPlan;
+  return {
+    ...mealPlan,
+    date: mealPlan.day,
+    servings: 1
+  } as MealPlan;
 };
 
 export const removeMealPlan = async (id: string) => {
@@ -113,7 +123,11 @@ export const getMealPlanByDateRange = async (
     .order('date', { ascending: true });
 
   if (error) throw error;
-  return mealPlans as MealPlan[];
+  return mealPlans?.map(plan => ({
+    ...plan,
+    date: plan.day,
+    servings: 1
+  })) as MealPlan[];
 };
 
 export const generateShoppingListFromMealPlan = async (

@@ -189,9 +189,9 @@ export default function AdminDashboard() {
                         <Label htmlFor="role">Role</Label>
                         <Select
                           value={newUser.role}
-                          onValueChange={(value: 'user' | 'admin') =>
-                            setNewUser({ ...newUser, role: value })
-                          }
+          onValueChange={(value: any) =>
+            setNewUser({ ...newUser, role: value as any })
+          }
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select role" />

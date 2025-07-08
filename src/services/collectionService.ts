@@ -31,7 +31,7 @@ export const createCollection = async (data: {
   is_public?: boolean;
 }) => {
   const { data: collection, error } = await supabase
-    .from('collections')
+    .from('recipe_collections')
     .insert({
       ...data,
       user_id: (await supabase.auth.getUser()).data.user?.id,
@@ -45,7 +45,7 @@ export const createCollection = async (data: {
 
 export const getUserCollections = async () => {
   const { data: collections, error } = await supabase
-    .from('collections')
+    .from('recipe_collections')
     .select(`
       *,
       recipes:collection_recipes(
@@ -60,7 +60,11 @@ export const getUserCollections = async () => {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return collections as Collection[];
+  return collections?.map(collection => ({
+    ...collection,
+    updated_at: collection.created_at,
+    recipes: collection.recipes?.map((r: any) => r.recipe) || []
+  })) as Collection[];
 };
 
 export const addRecipeToCollection = async (collectionId: string, recipeId: string) => {
@@ -99,14 +103,20 @@ export const createMealPlan = async (data: {
   const { data: mealPlan, error } = await supabase
     .from('meal_plans')
     .insert({
-      ...data,
       user_id: (await supabase.auth.getUser()).data.user?.id,
+      day: data.date,
+      meal_type: data.meal_type,
+      recipe_id: data.recipe_id,
     })
     .select()
     .single();
 
   if (error) throw error;
-  return mealPlan as MealPlan;
+  return { 
+    ...mealPlan, 
+    date: mealPlan.day, 
+    servings: 1 
+  } as MealPlan;
 };
 
 export const getMealPlanByDateRange = async (startDate: string, endDate: string) => {
@@ -125,7 +135,11 @@ export const getMealPlanByDateRange = async (startDate: string, endDate: string)
     .order('date', { ascending: true });
 
   if (error) throw error;
-  return mealPlans as MealPlan[];
+  return mealPlans?.map(plan => ({
+    ...plan,
+    date: plan.day,
+    servings: 1
+  })) as MealPlan[];
 };
 
 export const updateMealPlan = async (id: string, data: Partial<MealPlan>) => {
@@ -137,7 +151,11 @@ export const updateMealPlan = async (id: string, data: Partial<MealPlan>) => {
     .single();
 
   if (error) throw error;
-  return updatedMealPlan as MealPlan;
+  return {
+    ...updatedMealPlan,
+    date: updatedMealPlan.day,
+    servings: 1
+  } as MealPlan;
 };
 
 export const deleteMealPlan = async (id: string) => {

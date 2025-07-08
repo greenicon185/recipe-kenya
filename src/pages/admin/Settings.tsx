@@ -114,7 +114,7 @@ const AdminSettings = () => {
       if (!user) return;
       try {
         const preferences = await getUserPreferences(user.id);
-        setUserPreferences(preferences);
+        setUserPreferences(preferences as any);
       } catch (error) {
         console.error('Error fetching user preferences:', error);
       }

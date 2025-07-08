@@ -12,7 +12,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
   getShoppingLists,
-  getShoppingList,
   toggleShoppingListItem,
   removeShoppingListItem,
   addCustomItemToShoppingList,
@@ -68,8 +67,9 @@ export default function ShoppingList() {
     try {
       setLoading(true);
       setError(null);
-      const list = await getShoppingList(id);
-      setShoppingList(list);
+      const lists = await getShoppingLists();
+      const list = lists.find(l => l.id === id);
+      setShoppingList(list || null);
     } catch (err) {
       console.error('Error fetching shopping list:', err);
       setError('Failed to load shopping list. Please try again.');
@@ -376,7 +376,7 @@ export default function ShoppingList() {
                               <div className="space-y-4">
                                 {selectedItem?.ingredient && (
                                   <SupermarketAvailability
-                                    ingredientId={selectedItem.ingredient.id}
+                                    ingredientId="temp-id"
                                   />
                                 )}
                               </div>

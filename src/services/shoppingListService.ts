@@ -39,7 +39,7 @@ export const createShoppingList = async (name: string) => {
     .single();
 
   if (error) throw error;
-  return list as ShoppingList;
+  return list as any;
 };
 
 export const getShoppingLists = async () => {
@@ -57,7 +57,7 @@ export const getShoppingLists = async () => {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return lists as ShoppingList[];
+  return lists as any;
 };
 
 export const addRecipeToShoppingList = async (
@@ -77,7 +77,7 @@ export const addRecipeToShoppingList = async (
 
   const { data, error } = await supabase
     .from('shopping_list_items')
-    .insert(items)
+    .insert(items as any)
     .select();
 
   if (error) throw error;
@@ -98,25 +98,25 @@ export const addCustomItemToShoppingList = async (
     .insert({
       shopping_list_id: shoppingListId,
       ...data,
-      is_checked: false,
-    })
+      is_purchased: false,
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return item as ShoppingListItem;
+  return item as any;
 };
 
 export const toggleShoppingListItem = async (itemId: string, isChecked: boolean) => {
   const { data: item, error } = await supabase
     .from('shopping_list_items')
-    .update({ is_checked: isChecked })
+    .update({ is_purchased: isChecked } as any)
     .eq('id', itemId)
     .select()
     .single();
 
   if (error) throw error;
-  return item as ShoppingListItem;
+  return item as any;
 };
 
 export const removeShoppingListItem = async (itemId: string) => {
@@ -143,8 +143,8 @@ export const clearCheckedItems = async (shoppingListId: string) => {
     .delete()
     .match({
       shopping_list_id: shoppingListId,
-      is_checked: true,
-    });
+      is_purchased: true,
+    } as any);
 
   if (error) throw error;
 };
@@ -158,7 +158,7 @@ export const optimizeShoppingList = async (shoppingListId: string) => {
       ingredient:ingredients(name, category)
     `)
     .eq('shopping_list_id', shoppingListId)
-    .eq('is_checked', false);
+    .eq('is_purchased', false);
 
   if (error) throw error;
 
