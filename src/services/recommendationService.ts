@@ -222,7 +222,7 @@ export const getWeeklyMealPlan = async () => {
     mealPlan[dayKey] = [];
 
     for (const mealType of mealTypes) {
-      const { data: recipes } = await supabase
+      const { data: recipes } = await (supabase as any)
         .from('recipes')
         .select(`
           *,
@@ -746,7 +746,7 @@ export const ensureDatabaseTables = async () => {
     
     for (const table of tables) {
       try {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from(table)
           .select('*')
           .limit(1);

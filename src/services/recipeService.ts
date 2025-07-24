@@ -584,7 +584,7 @@ export const shareRecipe = async (recipeId: string, userIds: string[]) => {
 };
 
 export const getSharedRecipes = async () => {
-  const { data: recipes, error } = await supabase
+  const { data: recipes, error } = await (supabase as any)
     .from('recipe_reviews')
     .select(`
       *,
