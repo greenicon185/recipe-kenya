@@ -27,6 +27,8 @@ import Supermarkets from "./pages/Supermarkets";
 import MealPlanner from './pages/MealPlanner';
 import MealPlans from './pages/MealPlans';
 import Settings from './pages/Settings';
+import Communities from './pages/Communities';
+import CommunityDetail from './pages/CommunityDetail';
 
 // Optimized QueryClient with better defaults
 const queryClient = new QueryClient({
@@ -59,6 +61,8 @@ const AppContent = () => {
         <Route path="/meal-planner" element={<MealPlanner />} />
         <Route path="/meal-plans" element={<MealPlans />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/communities" element={<Communities />} />
+        <Route path="/communities/:id" element={<CommunityDetail />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />

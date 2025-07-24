@@ -16,7 +16,8 @@ import {
   Utensils,
   Calendar,
   ShoppingCart,
-  BookOpen
+  BookOpen,
+  Users
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
@@ -35,6 +36,7 @@ const Header = () => {
   const navigationItems = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/cuisines', label: 'Cuisines', icon: Utensils },
+    { to: '/communities', label: 'Communities', icon: Users },
     { to: '/meal-planner', label: 'Meal Planner', icon: Calendar },
     { to: '/supermarkets', label: 'Supermarkets', icon: ShoppingCart },
   ];
@@ -76,6 +78,13 @@ const Header = () => {
               className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-500 font-medium transition-colors"
             >
               Cuisines
+            </Link>
+            <Link 
+              to="/communities" 
+              className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-500 font-medium transition-colors flex items-center gap-1"
+            >
+              <Users className="h-4 w-4" />
+              Communities
             </Link>
             <Link 
               to="/meal-planner" 
