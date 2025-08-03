@@ -35,17 +35,26 @@ const FloatingChatBot = () => {
       recog.continuous = false;
       recog.interimResults = false;
       recog.lang = 'en-US';
+      recog.maxAlternatives = 1;
       
       recog.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        console.log('Speech recognition result:', transcript);
-        setInputMessage(transcript);
-        setIsRecording(false);
-        handleSendMessage(transcript);
+        console.log('Speech recognition onresult triggered:', event);
+        console.log('Results length:', event.results?.length);
+        if (event.results && event.results.length > 0) {
+          const transcript = event.results[0][0].transcript;
+          console.log('Speech recognition result:', transcript);
+          setInputMessage(transcript);
+          setIsRecording(false);
+          // Use setTimeout to ensure state updates have processed
+          setTimeout(() => handleSendMessage(transcript), 100);
+        } else {
+          console.log('No results in speech recognition event');
+          setIsRecording(false);
+        }
       };
       
       recog.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        console.error('Speech recognition error:', event.error, event);
         setIsRecording(false);
       };
       
@@ -58,14 +67,33 @@ const FloatingChatBot = () => {
         console.log('Speech recognition started');
       };
       
+      recog.onnomatch = () => {
+        console.log('Speech recognition: no match found');
+        setIsRecording(false);
+      };
+      
+      recog.onspeechstart = () => {
+        console.log('Speech detected');
+      };
+      
+      recog.onspeechend = () => {
+        console.log('Speech ended');
+      };
+      
       setRecognition(recog);
+    } else {
+      console.log('Speech recognition not supported in this browser');
     }
   }, []);
 
   const handleVoiceStart = () => {
-    if (!recognition) return;
+    if (!recognition) {
+      console.log('No recognition object available');
+      return;
+    }
     
     try {
+      console.log('Starting speech recognition...');
       setIsRecording(true);
       recognition.start();
     } catch (error) {
