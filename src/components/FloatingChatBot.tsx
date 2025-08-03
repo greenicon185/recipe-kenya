@@ -35,26 +35,43 @@ const FloatingChatBot = () => {
       recog.continuous = false;
       recog.interimResults = false;
       recog.lang = 'en-US';
+      
+      recog.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Speech recognition result:', transcript);
+        setInputMessage(transcript);
+        setIsRecording(false);
+        handleSendMessage(transcript);
+      };
+      
+      recog.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+      };
+      
+      recog.onend = () => {
+        console.log('Speech recognition ended');
+        setIsRecording(false);
+      };
+      
+      recog.onstart = () => {
+        console.log('Speech recognition started');
+      };
+      
       setRecognition(recog);
     }
   }, []);
 
   const handleVoiceStart = () => {
     if (!recognition) return;
-    setIsRecording(true);
-    recognition.start();
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setInputMessage(transcript);
+    
+    try {
+      setIsRecording(true);
+      recognition.start();
+    } catch (error) {
+      console.error('Error starting speech recognition:', error);
       setIsRecording(false);
-      handleSendMessage(transcript);
-    };
-    recognition.onerror = () => {
-      setIsRecording(false);
-    };
-    recognition.onend = () => {
-      setIsRecording(false);
-    };
+    }
   };
 
   const handleVoiceEnd = () => {

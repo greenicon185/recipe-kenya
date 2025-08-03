@@ -77,6 +77,34 @@ const ChatBot = () => {
       recog.continuous = false;
       recog.interimResults = false;
       recog.lang = 'en-US';
+      
+      recog.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Speech recognition result:', transcript);
+        setInputMessage(transcript);
+        setIsRecording(false);
+        handleSendMessage(transcript);
+      };
+      
+      recog.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+        toast({
+          title: "Voice input error",
+          description: "There was an error with voice recognition. Please try again.",
+          variant: "destructive",
+        });
+      };
+      
+      recog.onend = () => {
+        console.log('Speech recognition ended');
+        setIsRecording(false);
+      };
+      
+      recog.onstart = () => {
+        console.log('Speech recognition started');
+      };
+      
       setRecognition(recog);
     }
   }, []);
@@ -295,27 +323,6 @@ const ChatBot = () => {
     try {
       setIsRecording(true);
       recognition.start();
-      
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInputMessage(transcript);
-        setIsRecording(false);
-        handleSendMessage(transcript);
-      };
-      
-      recognition.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        setIsRecording(false);
-        toast({
-          title: "Voice input error",
-          description: "There was an error with voice recognition. Please try again.",
-          variant: "destructive",
-        });
-      };
-      
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
     } catch (error) {
       console.error('Error starting voice recognition:', error);
       setIsRecording(false);
