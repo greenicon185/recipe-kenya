@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.12 (cd3cf9e)"
@@ -2094,11 +2094,11 @@ export type Database = {
         Returns: string
       }
       get_user_recommendations: {
-        Args: { p_user_id: string; p_limit?: number; p_context?: Json }
+        Args: { p_context?: Json; p_limit?: number; p_user_id: string }
         Returns: {
           recipe_id: string
-          recommendation_score: number
           recommendation_reason: string
+          recommendation_score: number
         }[]
       }
       get_user_role: {
@@ -2126,7 +2126,7 @@ export type Database = {
         Returns: boolean
       }
       track_recipe_view: {
-        Args: { recipe_id: string; view_type?: string; search_term?: string }
+        Args: { recipe_id: string; search_term?: string; view_type?: string }
         Returns: undefined
       }
       verify_admin_password: {
