@@ -71,6 +71,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_recipe_generations: {
+        Row: {
+          created_at: string | null
+          generated_recipe: Json
+          generation_time_ms: number | null
+          id: string
+          model_used: string | null
+          prompt: string
+          user_id: string
+          user_rating: number | null
+          was_saved: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          generated_recipe: Json
+          generation_time_ms?: number | null
+          id?: string
+          model_used?: string | null
+          prompt: string
+          user_id: string
+          user_rating?: number | null
+          was_saved?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          generated_recipe?: Json
+          generation_time_ms?: number | null
+          id?: string
+          model_used?: string | null
+          prompt?: string
+          user_id?: string
+          user_rating?: number | null
+          was_saved?: boolean | null
+        }
+        Relationships: []
+      }
       chatbot_conversations: {
         Row: {
           conversation_data: Json
@@ -419,6 +455,91 @@ export type Database = {
           multiplier?: number | null
         }
         Relationships: []
+      }
+      cooking_session_participants: {
+        Row: {
+          id: string
+          joined_at: string | null
+          progress_data: Json | null
+          role: string | null
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          progress_data?: Json | null
+          role?: string | null
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          progress_data?: Json | null
+          role?: string | null
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooking_session_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "cooking_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cooking_sessions: {
+        Row: {
+          created_at: string | null
+          ended_at: string | null
+          host_user_id: string
+          id: string
+          is_active: boolean | null
+          max_participants: number | null
+          recipe_id: string
+          session_data: Json | null
+          session_name: string
+          session_type: string | null
+          started_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          ended_at?: string | null
+          host_user_id: string
+          id?: string
+          is_active?: boolean | null
+          max_participants?: number | null
+          recipe_id: string
+          session_data?: Json | null
+          session_name: string
+          session_type?: string | null
+          started_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          ended_at?: string | null
+          host_user_id?: string
+          id?: string
+          is_active?: boolean | null
+          max_participants?: number | null
+          recipe_id?: string
+          session_data?: Json | null
+          session_name?: string
+          session_type?: string | null
+          started_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooking_sessions_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cuisines: {
         Row: {
@@ -845,6 +966,44 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      recipe_3d_models: {
+        Row: {
+          created_at: string | null
+          id: string
+          interaction_data: Json | null
+          model_type: string | null
+          model_url: string | null
+          recipe_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          model_type?: string | null
+          model_url?: string | null
+          recipe_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          model_type?: string | null
+          model_url?: string | null
+          recipe_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_3d_models_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       recipe_analytics: {
         Row: {
@@ -1430,6 +1589,39 @@ export type Database = {
           },
         ]
       }
+      smart_kitchen_devices: {
+        Row: {
+          created_at: string | null
+          device_data: Json | null
+          device_name: string
+          device_type: string
+          id: string
+          is_connected: boolean | null
+          last_sync: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_data?: Json | null
+          device_name: string
+          device_type: string
+          id?: string
+          is_connected?: boolean | null
+          last_sync?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          device_data?: Json | null
+          device_name?: string
+          device_type?: string
+          id?: string
+          is_connected?: boolean | null
+          last_sync?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       supermarkets: {
         Row: {
           contact_info: Json | null
@@ -1600,6 +1792,33 @@ export type Database = {
           setting_value?: Json
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          achievement_data: Json | null
+          achievement_type: string
+          id: string
+          points_earned: number | null
+          unlocked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          achievement_data?: Json | null
+          achievement_type: string
+          id?: string
+          points_earned?: number | null
+          unlocked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          achievement_data?: Json | null
+          achievement_type?: string
+          id?: string
+          points_earned?: number | null
+          unlocked_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
